@@ -1,0 +1,23 @@
+# Версия docker-compose
+version: '3'
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "8082:80"
+    links:
+      - redis
+      - app
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+  app:
+    build: ./
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./:/app
+    links:
+      - redis

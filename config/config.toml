@@ -1,0 +1,11 @@
+[app]
+ip = "localhost"
+port = 8080
+
+[captcha]
+words = ["привет", "пока", "ночь", "день", "кофе"]
+
+[redis]
+addr = "redis:6379"
+password = ""
+db = 0
