@@ -3,7 +3,8 @@ package endpoint
 import (
 	"captcha-backend/config"
 	"captcha-backend/utils"
-	"crypto/sha256"
+	"crypto/sha1"
+	"encoding/hex"
 	"github.com/go-redis/redis"
 	"github.com/valyala/fasthttp"
 	"image"
@@ -51,7 +52,7 @@ func (h *Handler) GenerateSession(ctx *fasthttp.RequestCtx) {
 		return
 	}
 
-	hasher := sha256.New()
+	hasher := sha1.New()
 	hasher.Write([]byte(word))
 	sha := hasher.Sum(nil)
 
@@ -61,15 +62,15 @@ func (h *Handler) GenerateSession(ctx *fasthttp.RequestCtx) {
 		cypherText += "0"
 	}
 
-	sha128 := sha[:len(sha)/2]
+	sha128 := sha[:16]
 
-	sessionKey, err := utils.EncryptAES(sha128, cypherText)
+	captchaKey, err := utils.EncryptAES([]byte(hex.EncodeToString(sha128)), cypherText)
 	if err != nil {
 		SendErrorResponse(ctx, fasthttp.StatusInternalServerError, []byte("error generating aes session key "+err.Error()))
 		return
 	}
 
-	outFile, err := os.Create("endpoint/captcha_images/" + sessionKey + ".jpeg")
+	outFile, err := os.Create("endpoint/captcha_images/" + captchaKey + ".jpeg")
 	if err != nil {
 		SendErrorResponse(ctx, fasthttp.StatusInternalServerError, []byte("error creating image "+err.Error()))
 		return
@@ -82,12 +83,14 @@ func (h *Handler) GenerateSession(ctx *fasthttp.RequestCtx) {
 	}
 
 	SendSuccessResponse(ctx, struct {
+		Sha128         string
 		UserSessionKey string
-		SessionKey     string `json:"session_key"`
+		CaptchaKey     string `json:"captcha_key"`
 		ExpTime        int64  `json:"exp_time"`
 	}{
+		Sha128:         hex.EncodeToString(sha128),
 		UserSessionKey: userSessionKey,
-		SessionKey:     sessionKey,
+		CaptchaKey:     captchaKey,
 		ExpTime:        expTime,
 	})
 }

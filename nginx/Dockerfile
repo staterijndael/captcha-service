@@ -15,7 +15,7 @@ WORKDIR nginx-1.21.6
 RUN apt-get install -y mercurial
 RUN hg clone http://hg.nginx.org/njs
 RUN git clone https://github.com/openresty/redis2-nginx-module
-RUN ./configure --prefix=/etc/nginx --modules-path=/etc/nginx/modules --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --add-module=redis2-nginx-module --add-dynamic-module=njs/nginx
+RUN ./configure --prefix=/etc/nginx --modules-path=/etc/nginx/modules --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --with-http_sub_module --add-module=redis2-nginx-module --add-dynamic-module=njs/nginx
 RUN make -j2
 RUN make install
 

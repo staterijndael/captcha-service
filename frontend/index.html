@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<meta charset=utf-8>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>  <!--rollups/aes.js -->
+    <script src="https://cdn.jsdelivr.net/npm/node-forge@1.0.0/dist/forge.min.js"></script>
+</head>
+<body>
+
+<div id="mainContainer">
+    <div class="center">
+        <div id="box" class="box">
+            <image id="boxImage" class="center-relative resize"></image>
+            <label for="captcha_text" id="captcha_text_output" class="captcha_text center" style="visibility: hidden; margin-top: 5%">Input captcha here:</label><br><br>
+            <input type="text" id="captcha_text" name="captcha_text" class="captcha_text center" style="visibility: hidden; margin-top: 10%"><br><br>
+            <h4 type="text" id="error_msg" name="error_msg" class="error_msg center" style="visibility: hidden; margin-top: 10%"></h4>
+            <div id="homeImage" style="visibility: hidden;">
+            </div>
+        </div>
+        <button class="button center-relative" style="margin-top: 10%;" onclick="renderBoxImage()">Нажми меня )</button>
+    </div>
+</div>
